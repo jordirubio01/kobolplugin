@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual de Sintetizador</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* =====================
+           Reset & base
+        ===================== */
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* =====================
+           Top banner
+        ===================== */
+        .top-banner {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 45px;
+            background-color: #000000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .top-banner__title {
+            color: #ffffff;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 20px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        /* =====================
+           Language switcher
+        ===================== */
+        .lang-switcher {
+            position: absolute;
+            right: 20px;
+            display: flex;
+            gap: 6px;
+        }
+
+        .lang-btn {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 600;
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #ffffff;
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            padding: 2px 7px;
+            cursor: pointer;
+            transition: background 0.15s, border-color 0.15s;
+        }
+
+        .lang-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: rgba(255, 255, 255, 0.6);
+        }
+
+        .lang-btn.active {
+            background: #ffffff;
+            color: #000000;
+            border-color: #ffffff;
+        }
+
+        /* =====================
+           Global
+        ===================== */
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family: 'Barlow Condensed', sans-serif;
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 1.1;
+            color: #1a1a1a;
+            background-color: #ffffff;
+            padding: 40px 20px;
+            padding-top: 85px;
+        }
+
+        /* =====================
+           Layout
+        ===================== */
+        .container {
+            max-width: 840px;
+            margin: 0 auto;
+        }
+
+        /* =====================
+           Header image
+        ===================== */
+        .header-image {
+            text-align: center;
+            margin-top: -25px;
+            margin-bottom: 25px;
+        }
+
+        .header-image img {
+            display: block;
+            margin: 0 auto;
+            width: 641px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+
+        /* =====================
+           Two-column grid
+        ===================== */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(4, auto);
+            column-gap: 60px;
+        }
+
+        /* =====================
+           Parameter items
+        ===================== */
+        .item {
+            padding-bottom: 30px;
+            margin-top: -5px;
+            transform-origin: top left;
+        }
+
+        .item__title {
+            display: block;
+            font-weight: 600;
+            font-size: 19px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            margin-bottom: 2px;
+            transform: scaleY(0.95);
+            transform-origin: top left;
+        }
+
+        /* =====================
+            Footer
+        ===================== */
+        .footer {
+            position: fixed;
+            bottom: 12px;
+            right: 20px;
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            color: #aaaaaa;
+            letter-spacing: 0.5px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="top-banner">
+    <span class="top-banner__title">Kobol Plugin</span>
+    <nav class="lang-switcher" aria-label="Language selector">
+        <button class="lang-btn active" data-lang="ca">CA</button>
+        <button class="lang-btn" data-lang="es">ES</button>
+        <button class="lang-btn" data-lang="en">EN</button>
+        <button class="lang-btn" data-lang="nl">NL</button>
+    </nav>
+</div>
+
+<div class="container">
+
+    <header class="header-image">
+        <img src="kobolplugin.jpg" alt="Panel del Sintetizador">
+    </header>
+
+    <main class="content-grid">
+
+        <!-- Fila 1 -->
+        <div class="item">
+            <strong class="item__title">WAVEFORM</strong>
+            <span class="t" data-key="waveform"></span>
+        </div>
+        <div class="item">
+            <strong class="item__title">ATTACK</strong>
+            <span class="t" data-key="attack"></span>
+        </div>
+
+        <!-- Fila 2 -->
+        <div class="item">
+            <strong class="item__title">VOLUME (1)</strong>
+            <span class="t" data-key="volume1"></span>
+        </div>
+        <div class="item">
+            <strong class="item__title">DECAY</strong>
+            <span class="t" data-key="decay"></span>
+        </div>
+
+        <!-- Fila 3 -->
+        <div class="item">
+            <strong class="item__title">VCF FREQUENCY</strong>
+            <span class="t" data-key="vcf"></span>
+        </div>
+        <div class="item">
+            <strong class="item__title">SUSTAIN</strong>
+            <span class="t" data-key="sustain"></span>
+        </div>
+
+        <!-- Fila 4 -->
+        <div class="item">
+            <strong class="item__title">RESONANCE</strong>
+            <span class="t" data-key="resonance"></span>
+        </div>
+        <div class="item">
+            <strong class="item__title">VOLUME (2)</strong>
+            <span class="t" data-key="volume2"></span>
+        </div>
+
+    </main>
+
+</div>
+
+<script>
+    const translations = {
+        ca: {
+            waveform:  "Utilitzi aquest control per ajustar la forma d'ona del VCO. Les formes d'ona disponibles van de triangular a rampa, dent de serra, quadrada i puls.",
+            volume1:   "Utilitzi aquest control per ajustar el nivell de volum previ al filtre.",
+            vcf:       "Utilitzi aquest control per ajustar la freqüència de tall del VCF.",
+            resonance: "Utilitzi aquest control per emfatitzar una banda de freqüències centrada a la freqüència de tall del VCF. En el màxim rang, això farà que el filtre auto-oscil·li (generarà una ona extra).",
+            attack:    "Utilitzi aquest control per ajustar el temps d'atac del generador d'envolvent del VCA.",
+            decay:     "Utilitzi aquest control per ajustar els temps de decaïment (decay) i extinció (release) del generador d'envolvent del VCA.",
+            sustain:   "Utilitzi aquest control per ajustar el nivell de sosteniment del generador de l'envolvent del VCA.",
+            volume2:   "Utilitzi aquest control per ajustar el nivell de volum de sortida.",
+        },
+        es: {
+            waveform:  "Utilice este control para ajustar la forma de onda del VCO. Las formas de onda disponibles van de triangular a rampa, diente de sierra, cuadrada y pulso.",
+            volume1:   "Utilice este control para ajustar el nivel de volumen previo al filtro.",
+            vcf:       "Utilice este control para ajustar la frecuencia de corte del VCF.",
+            resonance: "Utilice este control para enfatizar una banda de frecuencias centrada en la frecuencia de corte del VCF. En el rango máximo, esto hará que el filtro auto-oscile (generará una onda extra).",
+            attack:    "Utilice este control para ajustar el tiempo de ataque del generador de envolvente del VCA.",
+            decay:     "Utilice este control para ajustar los tiempos de caída (decay) y extinción (release) del generador de envolvente del VCA.",
+            sustain:   "Utilice este control para ajustar el nivel de sostenimiento del generador de envolvente del VCA.",
+            volume2:   "Utilice este control para ajustar el nivel de volumen de salida.",
+        },
+        en: {
+            waveform:  "Use this control to adjust the VCO waveform. Available waveforms range from triangle to ramp, sawtooth, square and pulse.",
+            volume1:   "Use this control to adjust the volume level before the filter.",
+            vcf:       "Use this control to adjust the VCF cutoff frequency.",
+            resonance: "Use this control to emphasize a frequency band centered at the VCF cutoff frequency. At maximum range, this will cause the filter to self-oscillate (generating an extra wave).",
+            attack:    "Use this control to adjust the attack time of the VCA envelope generator.",
+            decay:     "Use this control to adjust the decay and release times of the VCA envelope generator.",
+            sustain:   "Use this control to adjust the sustain level of the VCA envelope generator.",
+            volume2:   "Use this control to adjust the output volume level.",
+        },
+        nl: {
+            waveform:  "Gebruik deze knop om de golfvorm van de VCO aan te passen. De beschikbare golfvormen variëren van driehoek tot zaagtand, omgekeerde zaagtand, blokgolf en puls.",
+            volume1:   "Gebruik deze knop om het volumeniveau vóór het filter in te stellen.",
+            vcf:       "Gebruik deze knop om de afsnijfrequentie van het VCF in te stellen.",
+            resonance: "Gebruik deze knop om een frequentieband rond de afsnijfrequentie van het VCF te benadrukken. Bij maximale waarde zal het filter zelf gaan oscilleren (en een extra golf genereren).",
+            attack:    "Gebruik deze knop om de aanstijgtijd van de VCA-envelopgenerator in te stellen.",
+            decay:     "Gebruik deze knop om de decay- en releasetijden van de VCA-envelopgenerator in te stellen.",
+            sustain:   "Gebruik deze knop om het sustainniveau van de VCA-envelopgenerator in te stellen.",
+            volume2:   "Gebruik deze knop om het uitgangsniveau in te stellen.",
+        }
+    };
+
+    function applyLanguage(lang) {
+        const t = translations[lang];
+        document.querySelectorAll('.t[data-key]').forEach(el => {
+            el.textContent = t[el.dataset.key] ?? '';
+        });
+        document.documentElement.lang = lang;
+    }
+
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            applyLanguage(btn.dataset.lang);
+            localStorage.setItem('kobol-lang', btn.dataset.lang);
+        });
+    });
+
+    // Init: preferencia guardada → idioma del navegador → inglés por defecto
+    const available = Object.keys(translations);
+    const saved     = localStorage.getItem('kobol-lang');
+    const browser   = (navigator.language || '').slice(0, 2).toLowerCase();
+    const initLang  = available.includes(saved)   ? saved
+                    : available.includes(browser) ? browser
+                    : 'en';
+
+    document.querySelectorAll('.lang-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector(`.lang-btn[data-lang="${initLang}"]`).classList.add('active');
+    applyLanguage(initLang);
+</script>
+
+<footer class="footer">
+    &copy; 2026 Jordi Rubio Arbona
+</footer>
+
+</body>
+</html>
